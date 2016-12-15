@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Socket.io</title>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:8080');
+            var EVENT = module.exports.EVENT;
+            var win;
+            socket.on('message',function(data) {
+                win.receivedPrivate(data);
+            });
+            function openPrivate() {
+                win =window.open('popup.html', 1, 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbar=no,resizable=no,copyhistory=yes,width=300,height=400');         
+            }
+            function popupReady() {
+                 socket.emit('popup',"1");
+            }
+    // and html
+    <a href="#" onclick="openPrivate()">Open private</a>
+        </script>
+    </head>
+    <body>
+        <h1>Communication avec socket.io !</h1>
+         <p><input type="button" value="Embêter le serveur" id="poke" /></p>
+        <script>
+            $('#poke').click(function () {
+                alert("envoit data");
+                socket.emit('message', 'Salut serveur, ça va ?');
+
+            });
+            var pseudo = prompt('Quel est votre pseudo ?');
+            socket.emit('new_profil', pseudo);
+        </script>
+    </body>
+
+</html>
